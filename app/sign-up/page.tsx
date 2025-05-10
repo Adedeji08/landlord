@@ -1,8 +1,10 @@
 import SwiperSlides from "@/component/common/SwiperSlides";
-import LoginForm from "@/component/LoginForm";
+import SignupForm from "@/component/SignupForm";
 import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
-const LoginPage = () => {
+const SignupPage = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50">
       <div className="w-full h-full grid lg:grid-cols-2">
@@ -18,9 +20,7 @@ const LoginPage = () => {
             height={150}
             className="mx-auto mb-10"
           />
-
-          <LoginForm />
-
+          <SignupForm />
           <p className="text-sm text-gray-500 text-center mt-4">or</p>
           <div className="flex justify-center items-center w-90 mt-4">
             <a
@@ -33,13 +33,13 @@ const LoginPage = () => {
 
           <div className="flex justify-center items-center mt-8">
             <p className="text-sm text-gray-500">
-              Need an account?{" "}
-              <a
-                href="/sign-up"
+              Already have an account?{" "}
+              <Link
+                href="/"
                 className="text-blue-950 font-bold hover:underline"
               >
-                Sign up here
-              </a>
+                Sign in here
+              </Link>
             </p>
           </div>
         </div>
@@ -48,4 +48,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
