@@ -151,7 +151,7 @@ const ViewRentedProperty = () => {
         <div className="flex flex-col p-3 flex-1">
           <div className="flex flex-col h-full justify-between">
             <h2 className="text-4xl font-bold text-blue-950">₦1,000,000/Year</h2>
-            <div className="flex gap-5 text-gray-600">
+            <div className="flex items-center gap-2 text-gray-600 font-bold mt-2">
               <MapPin className="w-4 h-4" /> Blantyre Street, Maitama
             </div>
             <hr className="w-20 h-[2px] bg-[#FF5B19] mb-3 mt-4" />

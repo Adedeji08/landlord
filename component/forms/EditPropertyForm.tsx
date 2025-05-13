@@ -49,28 +49,28 @@ const EditPropertyForm = () => {
       <Image
         src="/assets/img/jodex-featured-image.jpg"
         alt="Jodex House"
-        width={500}
-        height={500}
-        className="rounded-lg shadow-lg"
+        width={700}
+        height={700}
+        className="rounded-lg shadow-lg object-cover"
       />
 
       {/* Property Details */}
       <div className="space-y-2">
         <h2 className="text-3xl text-blue-950 font-light">2 Bedrooms Apartment</h2>
         <div className="flex items-center gap-6">
-          <h2 className="inline-flex gap-1 text-xl font-light">
-            <MapPin width="20px" height="20px" /> D12 Market, Abuja
+          <h2 className="flex gap-1 text-sm font-bold items-center">
+            <MapPin className='w-4 h-4' /> D12 Market, Abuja
           </h2>
-          <h2 className="text-xl font-light">Listed on 12/12/2023</h2>
+          <h2 className="text-sm font-bold">Listed on 12/12/2023</h2>
         </div>
-        <h2 className="text-3xl text-blue-950 font-bold">₦1,000,000/Year</h2>
-        <h2 className="text-xl font-light">Property Condition: Good</h2>
+        <h2 className="text-2xl text-blue-950 font-bold">₦1,000,000/yearly</h2>
+        <h2 className="text-sm font-bold">Property Condition: Good</h2>
       </div>
 
       {/* Features */}
       <div className="space-y-2">
         <h2 className="text-[20px] font-bold">Features</h2>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center justify-between">
           {['Gym', 'Laundry', 'Parking', 'Garden'].map((feature) => (
             <Badge
               key={feature}
@@ -142,8 +142,8 @@ const EditPropertyForm = () => {
 
       {/* Action Buttons */}
       <div className="flex justify-between items-center py-4 space-x-10">
-        <Button className='bg-white cursor-pointer border-2 border-blue-950 text-blue-950 p-10 hover:bg-blue-950 hover:text-white hover:border-none'>Discard</Button>
-        <Button className='bg-blue-950 cursor-pointer text-white p-10 hover:bg-blue-900'>Save</Button>
+        <Button className='bg-white cursor-pointer border-2 border-blue-950 text-blue-950 p-5 hover:bg-blue-950 hover:text-white hover:border-none'>Discard</Button>
+        <Button className='bg-blue-950 cursor-pointer text-white p-5 hover:bg-blue-900'>Save</Button>
       </div>
     </div>
   );
