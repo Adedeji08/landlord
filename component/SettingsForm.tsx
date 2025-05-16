@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -23,14 +24,20 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import useApi from "./hook/request";
+import { showToast } from "./toast";
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const SettingsForm = () => {
+  const userToken = localStorage.getItem("token");
+  const { makeRequest } = useApi("/user/update", "PUT", {
+    Authorization: `Bearer ${userToken}`,
+  });
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       phoneNumber: "",
       gender: undefined,
@@ -40,13 +47,39 @@ const SettingsForm = () => {
       businessName: "",
       address: "",
       option: undefined,
-      cacDocument: undefined,
+      cac: undefined,
     },
   });
 
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log(data);
-  };
+const onSubmit = async (data: ProfileFormValues) => {
+  const formData = new FormData();
+  formData.append("email", data.email);
+  formData.append("name", data.name);
+  formData.append("phoneNumber", data.phoneNumber);
+  formData.append("gender", data.gender ?? "");
+  formData.append("dateOfBirth", data.dateOfBirth);
+  formData.append("ninNumber", data.ninNumber);
+  formData.append("maritalStatus", data.maritalStatus ?? "");
+  formData.append("businessName", data.businessName);
+  formData.append("address", data.address);
+  formData.append("option", data.option ?? "");
+
+  if (data.cac) {
+    formData.append("cac", data.cac);
+  }
+
+  const [res, status] = await makeRequest(formData);
+
+  if (status === 200) {
+    showToast("Profile update successful!", true, { position: "top-right" });
+    form.reset();
+  } else {
+    const message =
+      (res as any)?.message || "Profile update failed. Please try again.";
+    showToast(message, false, { position: "top-right" });
+  }
+};
+
   return (
     <Card className="max-w-7xl mt-10 shadow-none border-none">
       <CardContent>
@@ -56,7 +89,7 @@ const SettingsForm = () => {
             className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             <FormField
-              name="fullName"
+              name="name"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -225,7 +258,7 @@ const SettingsForm = () => {
             />
 
             <FormField
-              name="cacDocument"
+              name="cac"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="col-span-1 md:col-span-2">

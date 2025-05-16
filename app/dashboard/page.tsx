@@ -1,11 +1,58 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import SideNavBar from "@/component/common/SideNavBar";
 import TopNavBar from "@/component/common/TopNavBar";
 import OccupancySection from "@/component/dashboard-ui/OccupancySection";
 import StatsSection from "@/component/dashboard-ui/StatsSection";
 import TopCards from "@/component/dashboard-ui/TopCards";
-import React from "react";
+import useRequest from "@/component/hook/use-req";
+import { ChartData, MetricData, ProfileData } from "@/component/types";
+import React, { useEffect, useState } from "react";
 
 const DashboardPage = () => {
+  const userToken = localStorage.getItem("token");
+  const [chart, setChart] = useState<ChartData | null>(null);
+  const [metrics, setMetrics] = useState<MetricData | null>(null);
+    const [profile, setProfile] = useState<ProfileData | null>(null);
+  const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET", {
+    Authorization: `Bearer ${userToken}`,
+  });
+        const id = (() => {
+    if (typeof window !== "undefined") {
+      const responseString = localStorage.getItem("user");
+      const userData = responseString ? JSON.parse(responseString) : null;
+      return userData?.user?.id || "";
+    }
+    return "";
+  })();
+    const { makeRequest: getProfile } = useRequest(`/user/${id}`, "GET", {
+    Authorization: `Bearer ${userToken}`,
+  });
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      const [response] = await getDashboard();
+      if (response) {
+        setChart(response.data?.charts);
+        setMetrics(response.data?.metrics);
+      }
+    };
+    fetchDashboard();
+  }, []);
+  console.log(profile)
+
+   useEffect(() => {
+    const fetchProfile = async () => {
+      const [response] = await getProfile();
+      if (response) {
+        setProfile(response.data);
+       
+      }
+    };
+    fetchProfile();
+  }, []);
+
+
+
   return (
     <div className="min-h-screen flex bg-gray-50">
       <nav className="bg-white w-80 flex flex-col gap-10 border-r border-slate-100 shadow-lg">
@@ -13,8 +60,11 @@ const DashboardPage = () => {
       </nav>
       <div className="right w-full flex gap-2 flex-col">
         <TopNavBar />
-        <TopCards />
-        <StatsSection />
+        {metrics && <TopCards metrics={metrics} />}
+
+        {chart &&  <StatsSection chart={chart} />}
+        
+
         <OccupancySection />
       </div>
     </div>

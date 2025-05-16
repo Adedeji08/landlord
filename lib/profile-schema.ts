@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const profileSchema = z.object({
-  fullName: z.string()
+  name: z.string()
     .min(2, { message: "Full name must be at least 2 characters" })
     .max(50, { message: "Full name must be at most 50 characters" }),
 
@@ -46,11 +46,15 @@ export const profileSchema = z.object({
     message: "Option must be either Landlord or Property Manager",
   }),
 
-  cacDocument: z.any().refine(
-    (file) => typeof window !== "undefined" && file instanceof File,
-    {
-      message: "CAC document must be a file",
-    }
-  ),
+cac: z
+  .any()
+  .optional()
+  .refine((file) => {
+    if (!file) return true; 
+    return file instanceof File;
+  }, {
+    message: "CAC document must be a valid file",
+  }),
+
 
 });
