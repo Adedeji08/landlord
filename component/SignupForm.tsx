@@ -66,7 +66,7 @@ const onSubmit = async (data: SignFormValues) => {
     form.reset();
     router.push("/verification-code");
   } else {
-    const message = (res as any)?.message || "Signup failed. Please try again.";
+    const message = (res as any)?.error || "Signup failed. Please try again.";
     showToast(message, false, { position: "top-right" });
   }
 };

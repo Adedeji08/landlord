@@ -8,7 +8,7 @@ export const signupSchema = z
 
         return emailRegex.test(value);
       },
-      { message: "Must be a valid email or phone number" }
+      { message: "Must be a valid email " }
     ),
 
    category: z.enum(["TENANT", "LANDLORD", "PROPERTY-MANAGER", "AGENT"], {

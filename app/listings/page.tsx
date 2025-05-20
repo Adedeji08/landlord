@@ -1,9 +1,49 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import SideNavBar from "@/component/common/SideNavBar";
 import TopNavBar from "@/component/common/TopNavBar";
+import useRequest from "@/component/hook/use-req";
 import Listings from "@/component/Listings";
-import React from "react";
+import { Property } from "@/component/types";
+import React, { useEffect, useState } from "react";
 
 const ListingPage = () => {
+  const userToken = localStorage.getItem("token");
+  const [listings, setListings] = useState<Property[] | null>(null);
+    const [rentedProperties, setRentedProperties] = useState<Property[] | null>(null);
+  const { makeRequest: getListing } = useRequest("/properties", "GET", {
+    Authorization: `Bearer ${userToken}`,
+  });
+    const { makeRequest: getProperties } = useRequest("/rent/rented", "GET", {
+    Authorization: `Bearer ${userToken}`,
+  });
+
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      const [response] = await getListing();
+      if (response) {
+        setListings(response);
+      }
+    };
+    fetchListing();
+  }, []);
+
+    useEffect(() => {
+    const fetchProperties = async () => {
+      const [response] = await getProperties();
+      if (response) {
+        setRentedProperties(response);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  console.log(rentedProperties)
+
+
+
   return (
     <div className="min-h-screen flex">
       <nav className="bg-white w-80 flex flex-col gap-10 border-r border-slate-100 shadow-lg">
@@ -11,7 +51,7 @@ const ListingPage = () => {
       </nav>
       <div className="right w-full flex gap-2 flex-col">
         <TopNavBar />
-        <Listings />
+        {listings && <Listings listings={listings} />}
       </div>
     </div>
   );

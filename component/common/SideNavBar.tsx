@@ -2,10 +2,10 @@
 
 import { signOut } from '@/lib/utils';
 import {
-  Archive,
-  FileText,
-  FolderClosed,
-  Hammer,
+  // Archive,
+  // FileText,
+  // FolderClosed,
+  // Hammer,
   House,
   LogOut,
   NotepadText,
@@ -31,10 +31,10 @@ const SideNavBar = () => {
   const navItems = [
     { href: '/dashboard', icon: <House className="h-5 w-5" />, label: 'Home' },
     { href: '/listings', icon: <NotepadText className="h-5 w-5" />, label: 'Listing' },
-    { href: '/manage-shortlet', icon: <Archive className="h-5 w-5" />, label: 'Manage Shortlet' },
-    { href: '/find-artisans', icon: <Hammer className="h-5 w-5" />, label: 'Find Artisans' },
-    { href: '/declutter-items', icon: <FolderClosed className="h-5 w-5" />, label: 'Declutter Items' },
-    { href: '/financial-statement', icon: <FileText className="h-5 w-5" />, label: 'Financial Statement' },
+    // { href: '/manage-shortlet', icon: <Archive className="h-5 w-5" />, label: 'Manage Shortlet' },
+    // { href: '/find-artisans', icon: <Hammer className="h-5 w-5" />, label: 'Find Artisans' },
+    // { href: '/declutter-items', icon: <FolderClosed className="h-5 w-5" />, label: 'Declutter Items' },
+    // { href: '/financial-statement', icon: <FileText className="h-5 w-5" />, label: 'Financial Statement' },
     { href: '/settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' },
     { 
       href: '#', 
