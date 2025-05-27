@@ -2,7 +2,7 @@
 "use client";
 import SideNavBar from "@/component/common/SideNavBar";
 import TopNavBar from "@/component/common/TopNavBar";
-import OccupancySection from "@/component/dashboard-ui/OccupancySection";
+// import OccupancySection from "@/component/dashboard-ui/OccupancySection";
 import StatsSection from "@/component/dashboard-ui/StatsSection";
 import TopCards from "@/component/dashboard-ui/TopCards";
 import useRequest from "@/component/hook/use-req";
@@ -13,19 +13,12 @@ const DashboardPage = () => {
   const userToken = localStorage.getItem("token");
   const [chart, setChart] = useState<ChartData | null>(null);
   const [metrics, setMetrics] = useState<MetricData | null>(null);
-    const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET", {
     Authorization: `Bearer ${userToken}`,
   });
-        const id = (() => {
-    if (typeof window !== "undefined") {
-      const responseString = localStorage.getItem("user");
-      const userData = responseString ? JSON.parse(responseString) : null;
-      return userData?.user?.id || "";
-    }
-    return "";
-  })();
-    const { makeRequest: getProfile } = useRequest(`/user/${id}`, "GET", {
+
+  const { makeRequest: getProfile } = useRequest(`/user`, "GET", {
     Authorization: `Bearer ${userToken}`,
   });
   useEffect(() => {
@@ -38,20 +31,17 @@ const DashboardPage = () => {
     };
     fetchDashboard();
   }, []);
-  console.log(profile)
 
-   useEffect(() => {
+
+  useEffect(() => {
     const fetchProfile = async () => {
       const [response] = await getProfile();
       if (response) {
         setProfile(response.data);
-       
       }
     };
     fetchProfile();
   }, []);
-
-
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -62,10 +52,9 @@ const DashboardPage = () => {
         <TopNavBar />
         {metrics && <TopCards metrics={metrics} />}
 
-        {chart &&  <StatsSection chart={chart} />}
-        
+        {chart && <StatsSection chart={chart} />}
 
-        <OccupancySection />
+        {/* <OccupancySection /> */}
       </div>
     </div>
   );

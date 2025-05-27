@@ -40,7 +40,7 @@ const ListingPage = () => {
     fetchProperties();
   }, []);
 
-  console.log(rentedProperties)
+  console.log('rentedProperties', rentedProperties)
 
 
 
