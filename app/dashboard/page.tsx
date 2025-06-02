@@ -10,10 +10,9 @@ import React, { useEffect, useState } from "react";
 
 const DashboardPage = () => {
   const [chart, setChart] = useState<ChartData | null>(null);
-  const [listings, setUpcomingListings] = useState<[] | null>(null);
   const [metrics, setMetrics] = useState<MetricData | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET", );
+  const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET");
 
   const { makeRequest: getProfile } = useRequest(`/auth/me`, "GET");
 
@@ -23,7 +22,6 @@ const DashboardPage = () => {
       if (response) {
         setChart(response?.data?.charts);
         setMetrics(response?.data?.metrics);
-        setUpcomingListings(response?.data?.listings)
       }
     };
     fetchDashboard();
