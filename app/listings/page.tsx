@@ -5,7 +5,7 @@ import SideNavBar from "@/component/common/SideNavBar";
 import TopNavBar from "@/component/common/TopNavBar";
 import useRequest from "@/component/hook/use-req";
 import Listings from "@/component/Listings";
-import { Property } from "@/component/types";
+import { ProfileData, Property } from "@/component/types";
 import React, { useEffect, useState } from "react";
 
 const ListingPage = () => {
@@ -18,6 +18,21 @@ const ListingPage = () => {
     const { makeRequest: getProperties } = useRequest("/rent/rented", "GET", {
     Authorization: `Bearer ${userToken}`,
   });
+    const [profile, setProfile] = useState<ProfileData | null>(null);
+  
+    const { makeRequest: getProfile } = useRequest(`/auth/me`, "GET", {
+      Authorization: `Bearer ${userToken}`,
+    });
+  
+    useEffect(() => {
+      const fetchProfile = async () => {
+        const [response] = await getProfile();
+        if (response) {
+          setProfile(response);
+        }
+      };
+      fetchProfile();
+    }, []);
 
 
   useEffect(() => {
@@ -50,7 +65,7 @@ const ListingPage = () => {
         <SideNavBar />
       </nav>
       <div className="right w-full flex gap-2 flex-col">
-        <TopNavBar />
+        <TopNavBar profile={profile} />
         {listings && <Listings listings={listings} />}
       </div>
     </div>

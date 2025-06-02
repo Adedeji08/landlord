@@ -12,7 +12,7 @@ export const profileSchema = z.object({
       return emailRegex.test(value);
     }, { message: "Invalid email address" }),
 
-  phoneNumber: z.string()
+  contactNumber: z.string()
     .refine((value) => {
       const phoneRegex = /^\+?[1-9]\d{1,14}$/;
       return phoneRegex.test(value);
@@ -28,7 +28,7 @@ export const profileSchema = z.object({
       return !isNaN(date.getTime());
     }, { message: "Invalid date of birth" }),
 
-  ninNumber: z.string()
+  nin: z.string()
     .min(11, { message: "NIN must be 11 digits" })
     .max(11, { message: "NIN must be 11 digits" }),
 

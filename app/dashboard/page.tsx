@@ -18,9 +18,10 @@ const DashboardPage = () => {
     Authorization: `Bearer ${userToken}`,
   });
 
-  const { makeRequest: getProfile } = useRequest(`/user`, "GET", {
+  const { makeRequest: getProfile } = useRequest(`/auth/me`, "GET", {
     Authorization: `Bearer ${userToken}`,
   });
+
   useEffect(() => {
     const fetchDashboard = async () => {
       const [response] = await getDashboard();
@@ -32,12 +33,11 @@ const DashboardPage = () => {
     fetchDashboard();
   }, []);
 
-
   useEffect(() => {
     const fetchProfile = async () => {
       const [response] = await getProfile();
       if (response) {
-        setProfile(response.data);
+        setProfile(response);
       }
     };
     fetchProfile();
@@ -49,7 +49,7 @@ const DashboardPage = () => {
         <SideNavBar />
       </nav>
       <div className="right w-full flex gap-2 flex-col">
-        <TopNavBar />
+        <TopNavBar profile={profile} />
         {metrics && <TopCards metrics={metrics} />}
 
         {chart && <StatsSection chart={chart} />}

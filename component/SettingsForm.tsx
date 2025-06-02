@@ -19,13 +19,14 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import useApi from "./hook/request";
 import { showToast } from "./toast";
+import { ProfileData } from "./types";
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -34,15 +35,21 @@ const SettingsForm = () => {
   const { makeRequest } = useApi("/user/update", "PUT", {
     Authorization: `Bearer ${userToken}`,
   });
+
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const { makeRequest: getProfile } = useApi(`/auth/me`, "GET", {
+    Authorization: `Bearer ${userToken}`,
+  });
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
       email: "",
-      phoneNumber: "",
+      contactNumber: "",
       gender: undefined,
       dateOfBirth: "",
-      ninNumber: "",
+      nin: "",
       maritalStatus: undefined,
       businessName: "",
       address: "",
@@ -51,34 +58,62 @@ const SettingsForm = () => {
     },
   });
 
-const onSubmit = async (data: ProfileFormValues) => {
-  const formData = new FormData();
-  formData.append("email", data.email);
-  formData.append("name", data.name);
-  formData.append("phoneNumber", data.phoneNumber);
-  formData.append("gender", data.gender ?? "");
-  formData.append("dateOfBirth", data.dateOfBirth);
-  formData.append("ninNumber", data.ninNumber);
-  formData.append("maritalStatus", data.maritalStatus ?? "");
-  formData.append("businessName", data.businessName);
-  formData.append("address", data.address);
-  formData.append("option", data.option ?? "");
+  const onSubmit = async (data: ProfileFormValues) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("name", data.name);
+    formData.append("contactNumber", data.contactNumber);
+    formData.append("gender", data.gender ?? "");
+    formData.append("dateOfBirth", data.dateOfBirth);
+    formData.append("nin", data.nin);
+    formData.append("maritalStatus", data.maritalStatus ?? "");
+    formData.append("businessName", data.businessName);
+    formData.append("address", data.address);
+    formData.append("option", data.option ?? "");
 
-  if (data.cac) {
-    formData.append("cac", data.cac);
-  }
+    if (data.cac) {
+      formData.append("cac", data.cac);
+    }
 
-  const [res, status] = await makeRequest(formData);
+    const [res, status] = await makeRequest(formData);
 
-  if (status === 200) {
-    showToast("Profile update successful!", true, { position: "top-right" });
-    form.reset();
-  } else {
-    const message =
-      (res as any)?.message || "Profile update failed. Please try again.";
-    showToast(message, false, { position: "top-right" });
-  }
-};
+    if (status === 200) {
+      showToast("Profile update successful!", true, { position: "top-right" });
+
+      setProfile((prev) => ({
+        ...prev,
+        ...res, // Assuming the response contains the updated profile data
+      }));
+    } else {
+      const message =
+        (res as any)?.message || "Profile update failed. Please try again.";
+      showToast(message, false, { position: "top-right" });
+    }
+  };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const [response] = await getProfile();
+      if (response) {
+        setProfile(response);
+
+        // Only reset form values once when data is first loaded
+        form.reset({
+          name: response.name || response.name || "",
+          email: response.email || "",
+          contactNumber: response.contactNumber || response.phone || "",
+          nin: response.nin || "",
+          address: response.address || "",
+          dateOfBirth: response.dateOfBirth || "",
+          gender: response.gender || "",
+          maritalStatus: response.maritalStatus || "",
+          businessName: response.businessName || ""
+        });
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <Card className="max-w-7xl mt-10 shadow-none border-none">
@@ -114,7 +149,7 @@ const onSubmit = async (data: ProfileFormValues) => {
               )}
             />
             <FormField
-              name="phoneNumber"
+              name="contactNumber"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -216,7 +251,7 @@ const onSubmit = async (data: ProfileFormValues) => {
               )}
             />
             <FormField
-              name="ninNumber"
+              name="nin"
               control={form.control}
               render={({ field }) => (
                 <FormItem>

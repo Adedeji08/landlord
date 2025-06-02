@@ -5,8 +5,11 @@ import SearchBar from "./SearchBar";
 import { BellDot, User2, Menu } from "lucide-react";
 import { signOut } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-
-const TopNavBar = () => {
+import { ProfileData } from "../types";
+interface ProfileProps{
+profile: ProfileData | null;
+}
+const TopNavBar: React.FC<ProfileProps> = ({ profile }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const router = useRouter();
@@ -15,38 +18,11 @@ const TopNavBar = () => {
     router.push("/");
   };
 
-    const businessName = (() => {
-    if (typeof window !== "undefined") {
-      const responseString = localStorage.getItem("user");
-      const userData = responseString ? JSON.parse(responseString) : null;
-      return userData?.user?.businessName || "";
-    }
-    return "";
-  })();
-
-      const name = (() => {
-    if (typeof window !== "undefined") {
-      const responseString = localStorage.getItem("user");
-      const userData = responseString ? JSON.parse(responseString) : null;
-      return userData?.user?.name || "";
-    }
-    return "";
-  })();
-
-        const owner = (() => {
-    if (typeof window !== "undefined") {
-      const responseString = localStorage.getItem("user");
-      const userData = responseString ? JSON.parse(responseString) : null;
-      return userData?.user?.category || "";
-    }
-    return "";
-  })();
-
   return (
     <div className="flex items-center justify-between h-16 px-4 md:px-8 border-b border-gray-300 relative">
       {/* Logo / Welcome */}
       <h1 className="text-sm sm:text-base font-light">
-        Welcome, <span className="font-bold text-blue-950">{businessName || 'Bliss Home'}</span>
+        Welcome, <span className="font-bold text-blue-950">{profile?.businessName || 'N/A'}</span>
       </h1>
 
       {/* Desktop Menu */}
@@ -60,8 +36,8 @@ const TopNavBar = () => {
           >
             <User2 className="h-6 w-6 text-gray-500" />
             <div className="flex flex-col text-sm">
-              <span className="text-blue-950 font-medium">{name || 'Bisola'}</span>
-              <span className="text-gray-500 text-xs">{owner}</span>
+              <span className="text-blue-950 font-medium">{profile?.name || 'N/A'}</span>
+              <span className="text-gray-500 text-xs">{profile?.category}</span>
             </div>
           </div>
 
@@ -82,8 +58,8 @@ const TopNavBar = () => {
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         <div className="flex flex-col text-sm">
-          <span className="text-blue-950 font-medium">Bisola</span>
-          <span className="text-gray-500 text-xs">Landlord</span>
+          <span className="text-blue-950 font-medium">{profile?.name || 'N/A'}</span>
+          <span className="text-gray-500 text-xs">{profile?.category || 'N/A'}</span>
         </div>
         <Menu className="h-6 w-6" />
       </button>

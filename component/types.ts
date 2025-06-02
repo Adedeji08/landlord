@@ -20,11 +20,18 @@ upcomingInspections: any[];
 }
 
 export interface ProfileData {
-  username: string;
-  email: string;
-  phone: string;
-  address: string;
-  lastLogin: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  lastLogin?: string;
+  name?:string;
+  businessName?:string;
+  cac?:string;
+  dateOfBirth?:string;
+  category?:string;
+  gender?:string;
+  maritalStatus?:string;
 }
 
 export interface User {
