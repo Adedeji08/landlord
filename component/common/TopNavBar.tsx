@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import SearchBar from "./SearchBar";
 import { BellDot, User2, Menu } from "lucide-react";

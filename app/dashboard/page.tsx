@@ -2,7 +2,6 @@
 "use client";
 import SideNavBar from "@/component/common/SideNavBar";
 import TopNavBar from "@/component/common/TopNavBar";
-// import OccupancySection from "@/component/dashboard-ui/OccupancySection";
 import StatsSection from "@/component/dashboard-ui/StatsSection";
 import TopCards from "@/component/dashboard-ui/TopCards";
 import useRequest from "@/component/hook/use-req";
@@ -10,24 +9,21 @@ import { ChartData, MetricData, ProfileData } from "@/component/types";
 import React, { useEffect, useState } from "react";
 
 const DashboardPage = () => {
-  const userToken = localStorage.getItem("token");
   const [chart, setChart] = useState<ChartData | null>(null);
+  const [listings, setUpcomingListings] = useState<[] | null>(null);
   const [metrics, setMetrics] = useState<MetricData | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET", {
-    Authorization: `Bearer ${userToken}`,
-  });
+  const { makeRequest: getDashboard } = useRequest("/user/dashboard", "GET", );
 
-  const { makeRequest: getProfile } = useRequest(`/auth/me`, "GET", {
-    Authorization: `Bearer ${userToken}`,
-  });
+  const { makeRequest: getProfile } = useRequest(`/auth/me`, "GET");
 
   useEffect(() => {
     const fetchDashboard = async () => {
       const [response] = await getDashboard();
       if (response) {
-        setChart(response.data?.charts);
-        setMetrics(response.data?.metrics);
+        setChart(response?.data?.charts);
+        setMetrics(response?.data?.metrics);
+        setUpcomingListings(response?.data?.listings)
       }
     };
     fetchDashboard();
