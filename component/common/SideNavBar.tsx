@@ -62,7 +62,7 @@ const SideNavBar = () => {
           md:relative md:translate-x-0 md:w-64 md:block
         `}
       >
-        <div className="flex items-center justify-center mt-6 md:mt-5">
+        <div className="flex px-6 mt-6 md:mt-5">
           <Image src="/assets/img/jodex-logo.png" alt="jodex logo" width={100} height={100} />
         </div>
 
