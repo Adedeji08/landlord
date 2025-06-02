@@ -49,8 +49,6 @@ const DashboardPage = () => {
         {metrics && <TopCards metrics={metrics} />}
 
         {chart && <StatsSection chart={chart} />}
-
-        {/* <OccupancySection /> */}
       </div>
     </div>
   );
